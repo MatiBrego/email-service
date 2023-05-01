@@ -31,4 +31,12 @@ export class UserRepository {
     });
     return user ? new UserDto(user) : null;
   }
+
+  async findById(userId: number): Promise<UserDto | null>{
+    const user = await this.db.user.findUnique({
+      where: {id: userId}
+    })
+
+    return user ? new UserDto(user) : null;
+  }
 }

@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
       throw new HttpException("Invalid Token", 401)
     }
 
-    //Add userId to the body
+    //Add userId to the body TODO Is this correct, or is there a better way?
     context.switchToHttp().getRequest().body.userId = this.jwtService.decode(token)["userId"]
 
     return true
