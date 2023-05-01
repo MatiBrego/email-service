@@ -12,6 +12,8 @@ export class SendgridMailProvider implements MailProvider{
       await SendGrid.send(input);
       return true
     }catch (err){
+      console.log(err)
+      console.log("Sendgrid failed")
       return false
     }
   }

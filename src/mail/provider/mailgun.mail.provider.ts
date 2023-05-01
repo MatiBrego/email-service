@@ -12,7 +12,13 @@ export class MailgunMailProvider implements MailProvider{
 
   //TODO Recipients must be validated in mailgun first
   async send(input: MailDto): Promise<boolean> {
-    await this.mg.messages().send(input)
-    return true
+    try {
+      await this.mg.messages().send(input)
+      return true
+    }catch (err){
+      console.log(err)
+      console.log("Mailgun failed")
+      return false
+    }
   }
 }
