@@ -29,6 +29,15 @@ export class StatsRepository{
   async getUsersEmailCount(dateStart: Date, dateFinish: Date): Promise<StatsDto[]>{
     return this.db.emailsByDay.findMany({
       where: { date: { gte: dateStart, lte: dateFinish } },
+      select: {
+        id: true,
+        userId: true,
+        user: {
+          select: {username: true, email: true}
+        },
+        date: true,
+        mailCount: true
+      }
     });
   }
 }
