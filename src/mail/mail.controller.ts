@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '../auth/guard/auth.guard';
 import { MailDto, MailInputDto } from './dto/mail.dto';
 import { MailService } from './mail.service';
 import { GetUserId } from '../auth/decorator/get.user.decorator';
+import { AuthGuard } from '@nestjs/passport';
 
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard('jwt'))
 @Controller("/mail")
 export class MailController{
 

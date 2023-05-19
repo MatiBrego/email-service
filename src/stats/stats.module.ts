@@ -5,12 +5,11 @@ import { Module } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { AuthModule } from '../auth/auth.module';
 import { UserModule } from '../user/user.module';
-import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   controllers: [StatsController],
-  providers: [StatsService, StatsRepository, PrismaClient, ],
-  imports: [AuthModule, UserModule, JwtModule.register({secret: process.env.TOKEN_SECRET, signOptions: {expiresIn: "1h"}})],
+  providers: [StatsService, StatsRepository, PrismaClient],
+  imports: [AuthModule, UserModule],
   exports: [StatsService]
 
 })export class StatsModule{}
