@@ -11,7 +11,6 @@ export class StatsService{
    * Adds one to the count of emails sent by the user in that day
    */
   async updateUserEmailCount(userId: number){
-    //TODO Handle this workaround with dates better
     const dateRange = this.getDateRange(new Date())
 
     const stats = await this.statsRepository.getByUserIdAndDate(userId, dateRange.dateStart, dateRange.dateEnd)
