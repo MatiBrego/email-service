@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { MailProvider } from './provider/mail.provider';
 import { SendgridMailProvider } from './provider/sendgrid.mail.provider';
 import { MailgunMailProvider } from './provider/mailgun.mail.provider';
+import { MockWorkingMailProvider } from './provider/mock.mail.provider';
 
 @Injectable()
 export class MailProviderService{
@@ -10,8 +11,8 @@ export class MailProviderService{
   private using: number;
 
   constructor() {
-    this.using = 0
-    this.providers = [new SendgridMailProvider(), new MailgunMailProvider()]
+    this.using = 2
+    this.providers = [new SendgridMailProvider(), new MailgunMailProvider(), new MockWorkingMailProvider()]
   }
 
   switchProvider(): MailProvider{
