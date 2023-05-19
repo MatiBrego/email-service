@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
     }
 
     //Add userId to the body TODO Is this correct, or is there a better way?
-    context.switchToHttp().getRequest().body.userId = this.jwtService.decode(token)["userId"]
+    context.switchToHttp().getRequest().userId = this.jwtService.decode(token)["userId"]
 
     return true
   }

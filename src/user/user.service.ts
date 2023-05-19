@@ -23,4 +23,10 @@ export class UserService{
     async getUserById(userId: number): Promise<UserDto | null>{
         return await this.userRepository.findById(userId);
     }
+
+    async userIsAdmin(userId: number): Promise<boolean>{
+        const user = (await this.userRepository.findById(userId));
+
+        return user? user.isAdmin : false
+    }
 }

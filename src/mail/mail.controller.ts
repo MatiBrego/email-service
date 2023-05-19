@@ -1,7 +1,8 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '../auth/auth.guard';
-import { MailInputDto } from './dto/mail.dto';
+import { AuthGuard } from '../auth/guard/auth.guard';
+import { MailDto, MailInputDto } from './dto/mail.dto';
 import { MailService } from './mail.service';
+import { GetUserId } from '../auth/decorator/get.user.decorator';
 
 @UseGuards(AuthGuard)
 @Controller("/mail")
@@ -11,13 +12,12 @@ export class MailController{
   }
 
   @Get("/test")
-  getTestFunction(@Body() input: {userId: string}){
-    console.log(input)
-    return input.userId;
+  getTestFunction(@GetUserId() userId){
+    console.log(userId)
   }
 
   @Post("/")
-  sendMail(@Body() input: MailInputDto){
-    return this.mailService.send(input);
+  sendMail(@Body() input: MailInputDto, @GetUserId() userId): Promise<MailDto>{
+    return this.mailService.send(input, userId);
   }
 }

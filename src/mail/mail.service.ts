@@ -16,10 +16,8 @@ export class MailService{
     this.provider = providerService.getProvider();
   }
 
-  async send(input: MailInputDto): Promise<MailDto>{
-    const userId = input.userId
-
-    const user = await this.userService.getUserById(input.userId);
+  async send(input: MailInputDto, userId): Promise<MailDto>{
+    const user = await this.userService.getUserById(userId);
 
     const msg = {from: user.email, ...input}
 

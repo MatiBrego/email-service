@@ -6,6 +6,7 @@ export class StatsDto{
   user?: {username: string, email: string}
 
   constructor(input: StatsDto) {
+    this.id = input.id
     this.userId = input.userId;
     this.mailCount = input.mailCount;
     this.date = input.date;
