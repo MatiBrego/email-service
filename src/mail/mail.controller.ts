@@ -11,11 +11,6 @@ export class MailController{
   constructor(private readonly mailService: MailService) {
   }
 
-  @Get("/test")
-  getTestFunction(@GetUserId() userId){
-    console.log(userId)
-  }
-
   @Post("/")
   sendMail(@Body() input: MailInputDto, @GetUserId() userId): Promise<MailDto>{
     return this.mailService.send(input, userId);

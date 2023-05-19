@@ -1,7 +1,13 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 export class MailInputDto{
+  @ApiProperty()
   userId: number
+  @ApiProperty()
   to: string
+  @ApiProperty()
   subject: string
+  @ApiProperty()
   text: string
 
   constructor(input: MailInputDto) {

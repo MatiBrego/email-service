@@ -1,6 +1,11 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 export class SignUpInput{
+    @ApiProperty()
     email: string
+    @ApiProperty()
     username: string
+    @ApiProperty()
     password: string
 
     constructor(input: SignUpInput) {
@@ -11,7 +16,9 @@ export class SignUpInput{
 }
 
 export class SignInInput{
+    @ApiProperty()
     username: string
+    @ApiProperty()
     password: string
 
     constructor(input: SignUpInput) {
