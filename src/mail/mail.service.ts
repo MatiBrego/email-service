@@ -16,21 +16,36 @@ export class MailService{
     this.provider = providerService.getProvider();
   }
 
-  async send(input: MailInputDto, userId): Promise<MailDto>{
+  async send(input: MailInputDto, userId): Promise<MailDto | null>{
     const user = await this.userService.getUserById(userId);
 
     const msg = {from: user.email, ...input}
 
-    const wasSent = await this.provider.send(msg)
+    const wasSent = await this.sendWithWorkingProvider(msg)
 
-    //TODO Check with all providers, not just once
-    if(!wasSent) {
-      this.provider = this.providerService.switchProvider()
-      await this.provider.send(msg)
+    if(wasSent){
+      await this.statsService.updateUserEmailCount(userId)
+
+      return {from: user.email, to: input.to, subject: input.subject, text: input.text}
+    }else {
+      return null
+    }
+  }
+
+  /*
+  * Tries to send the mail with current provider. If it is down, switch providers until a working one is found, or 5 times.
+  */
+  private async sendWithWorkingProvider(msg: {to: string, from: string, text: string, subject: string}): Promise<boolean>{
+    let count = 0
+
+    let wasSent = await this.provider.send(msg)
+
+    while(!wasSent && count < 5) {
+      this.provider = this.providerService.switchProvider();
+      wasSent = await this.provider.send(msg);
+      count ++;
     }
 
-    await this.statsService.updateUserEmailCount(userId)
-
-    return {from: user.email, to: input.to, subject: input.subject, text: input.text}
+    return wasSent;
   }
 }

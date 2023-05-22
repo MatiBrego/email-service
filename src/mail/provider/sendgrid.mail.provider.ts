@@ -1,7 +1,9 @@
 import { MailProvider } from './mail.provider';
 import * as SendGrid from '@sendgrid/mail';
 import { MailDto } from '../dto/mail.dto';
+import { Injectable } from '@nestjs/common';
 
+Injectable()
 export class SendgridMailProvider implements MailProvider{
 
   constructor(){SendGrid.setApiKey(process.env.SENDGRID_API_KEY)}

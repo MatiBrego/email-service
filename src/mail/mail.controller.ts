@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, InternalServerErrorException, Post, UseGuards } from '@nestjs/common';
 import { MailDto, MailInputDto } from './dto/mail.dto';
 import { MailService } from './mail.service';
 import { GetUserId } from '../auth/decorator/get.user.decorator';
@@ -12,7 +12,11 @@ export class MailController{
   }
 
   @Post("/")
-  sendMail(@Body() input: MailInputDto, @GetUserId() userId): Promise<MailDto>{
-    return this.mailService.send(input, userId);
+  async sendMail(@Body() input: MailInputDto, @GetUserId() userId): Promise<MailDto>{
+    const sentMail = await this.mailService.send(input, userId);
+
+    if(sentMail) return sentMail;
+
+    throw new InternalServerErrorException('Email Service is not working at the moment');
   }
 }

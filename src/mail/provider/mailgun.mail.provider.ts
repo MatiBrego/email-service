@@ -2,7 +2,9 @@ import * as mailgun from 'mailgun-js';
 import { MailProvider } from './mail.provider';
 import { MailDto } from '../dto/mail.dto';
 import { Mailgun } from 'mailgun-js';
+import { Injectable } from '@nestjs/common';
 
+Injectable()
 export class MailgunMailProvider implements MailProvider{
   mg: Mailgun;
 
