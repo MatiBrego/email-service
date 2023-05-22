@@ -21,16 +21,22 @@ describe("MailService", () => {
   let user: UserDto;
 
   beforeEach(async () => {
+    // Clean the db
+    await db.user.deleteMany()
+    await db.emailsByDay.deleteMany()
+
+    // Create user service
     const userService = new UserService(new UserRepository(db))
 
-    user = await userService.getUserById(7)
+    // Create new user
+    user = await userService.create('user1', 'user1@gmail.com', '1')
 
+    // Inject create mock providers and inject them
     providers = [new MockNotWorkingMailProvider(), new MockNotWorkingMailProvider(), new MockWorkingMailProvider()]
     mailProviderService = new MailProviderService(providers)
 
-
+    // Inject mail provider
     mailService = new MailService(userService, mailProviderService, new StatsService(new StatsRepository(db)))
-
   })
 
   describe("send", () => {
