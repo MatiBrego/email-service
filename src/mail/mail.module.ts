@@ -7,14 +7,19 @@ import { MailProviderService } from './mail.provider.service';
 import { StatsModule } from '../stats/stats.module';
 import { MailgunMailProvider } from './provider/mailgun.mail.provider';
 import { SendgridMailProvider } from './provider/sendgrid.mail.provider';
+import { MockNotWorkingMailProvider, MockWorkingMailProvider } from '../../test/unit/util/mock.mail.provider';
 
 const mailProviderService = new MailProviderService(
   [new MailgunMailProvider(), new SendgridMailProvider()]
 )
 
+const testMailProviderService = new MailProviderService(
+  [new MockNotWorkingMailProvider(), new MockWorkingMailProvider()]
+)
+
 @Module({
   imports: [AuthModule, UserModule, StatsModule],
   controllers: [MailController],
-  providers: [MailService, {provide: MailProviderService, useValue: mailProviderService}],
+  providers: [MailService, {provide: MailProviderService, useValue: testMailProviderService}],
   exports: [MailModule]
 }) export class MailModule{}

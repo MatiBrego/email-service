@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { MailDto, MailInputDto } from './dto/mail.dto';
 import { UserService } from '../user/user.service';
 import { MailProvider } from './provider/mail.provider';
@@ -17,6 +17,9 @@ export class MailService{
   }
 
   async send(input: MailInputDto, userId): Promise<MailDto | null>{
+
+    if(!(await this.canSendEmail(userId))) throw new UnauthorizedException('Email limit reached')
+
     const user = await this.userService.getUserById(userId);
 
     const msg = {from: user.email, ...input}
@@ -47,5 +50,11 @@ export class MailService{
     }
 
     return wasSent;
+  }
+
+  private async canSendEmail(userId){
+    const count = await this.statsService.getEmailCountByUserId(userId);
+
+    return count < 1000
   }
 }
