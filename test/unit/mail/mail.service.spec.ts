@@ -1,13 +1,14 @@
-import { UserService } from '../../src/user/user.service';
-import { UserRepository } from '../../src/user/user.repository';
+import { UserService } from '../../../src/user/user.service';
+import { UserRepository } from '../../../src/user/user.repository';
 import { PrismaClient } from '@prisma/client';
-import { MailService } from '../../src/mail/mail.service';
-import { MailProvider } from '../../src/mail/provider/mail.provider';
-import { MailProviderService } from '../../src/mail/mail.provider.service';
+import { MailService } from '../../../src/mail/mail.service';
+import { MailProvider } from '../../../src/mail/provider/mail.provider';
+import { MailProviderService } from '../../../src/mail/mail.provider.service';
 import { MockNotWorkingMailProvider, MockWorkingMailProvider } from './util/mock.mail.provider';
-import { StatsService } from '../../src/stats/stats.servcie';
-import { StatsRepository } from '../../src/stats/stats.repository';
-import { UserDto } from '../../src/user/dto/user.dto';
+import { StatsService } from '../../../src/stats/stats.servcie';
+import { StatsRepository } from '../../../src/stats/stats.repository';
+import { UserDto } from '../../../src/user/dto/user.dto';
+import { UnauthorizedException } from '@nestjs/common';
 
 describe("MailService", () => {
 
@@ -52,6 +53,14 @@ describe("MailService", () => {
       const result = await mailService.send({to: 'user2@gmail.com', text: 'Test', subject: 'Test'}, user.id)
 
       expect(result).toBeNull();
+    })
+
+    it("should throw an error if user has sent 1000 mails", async () => {
+      await db.emailsByDay.create({ data: { mailCount: 1000, userId: user.id} })
+
+      await expect(async () => {
+        await mailService.send({to: 'user2@gmail.com', text: 'Test', subject: 'Test'}, user.id)
+      }).rejects.toThrow(new UnauthorizedException("Email limit reached"))
     })
   })
 })

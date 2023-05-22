@@ -1,5 +1,5 @@
-import { MailProviderService } from '../../src/mail/mail.provider.service';
-import { MailProvider } from '../../src/mail/provider/mail.provider';
+import { MailProviderService } from '../../../src/mail/mail.provider.service';
+import { MailProvider } from '../../../src/mail/provider/mail.provider';
 import { MockWorkingMailProvider } from './util/mock.mail.provider';
 
 describe("MailProviderService", () => {

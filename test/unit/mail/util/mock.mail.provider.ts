@@ -1,4 +1,4 @@
-import { MailProvider } from '../../../src/mail/provider/mail.provider';
+import { MailProvider } from '../../../../src/mail/provider/mail.provider';
 
 export class MockWorkingMailProvider implements MailProvider{
   send(): Promise<boolean> {

@@ -18,8 +18,10 @@ export class MailService{
 
   async send(input: MailInputDto, userId): Promise<MailDto | null>{
 
+    // Check if mail limit has been reached
     if(!(await this.canSendEmail(userId))) throw new UnauthorizedException('Email limit reached')
 
+    // Try to send message
     const user = await this.userService.getUserById(userId);
 
     const msg = {from: user.email, ...input}
@@ -27,10 +29,12 @@ export class MailService{
     const wasSent = await this.sendWithWorkingProvider(msg)
 
     if(wasSent){
+      // Return message if sent
       await this.statsService.updateUserEmailCount(userId)
 
       return {from: user.email, to: input.to, subject: input.subject, text: input.text}
     }else {
+      // Return null if all providers are down
       return null
     }
   }
