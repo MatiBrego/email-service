@@ -3,6 +3,7 @@ import { MailDto, MailInputDto } from './dto/mail.dto';
 import { MailService } from './mail.service';
 import { GetUserId } from '../auth/decorator/get.user.decorator';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiHeader } from '@nestjs/swagger';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller("/mail")
@@ -12,6 +13,10 @@ export class MailController{
   }
 
   @Post("/")
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Must contain the jwt token for authorization: Bearer {token}'
+  })
   async sendMail(@Body() input: MailInputDto, @GetUserId() userId): Promise<MailDto>{
     const sentMail = await this.mailService.send(input, userId);
 

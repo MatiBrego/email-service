@@ -20,6 +20,6 @@ const testMailProviderService = new MailProviderService(
 @Module({
   imports: [AuthModule, UserModule, StatsModule],
   controllers: [MailController],
-  providers: [MailService, {provide: MailProviderService, useValue: mailProviderService}],
+  providers: [MailService, {provide: MailProviderService, useValue: testMailProviderService}],
   exports: [MailModule]
 }) export class MailModule{}
